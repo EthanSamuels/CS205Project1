@@ -34,6 +34,7 @@ private:
 	// is not connected to the center.
 	std::vector<char> solved_state = {'F', 'L', 'A', 'N','D','E','R','S','_'};
 	Node *start;
+	int limit = 1000000;
 public:
 	GeneralSearch(Node *n) : start(n) { }
 	
@@ -101,6 +102,7 @@ public:
 			std::swap(s.at(index), s.at(i));
 			ret.push_back(new Node(s));
 			
+			// Edge to center
 			if(index % 2){
 				s = n->state;
 				i = s.size() - 1;
@@ -108,8 +110,6 @@ public:
 				ret.push_back(new Node(s));
 			}
 		}
-		
-		//n->leaves = ret;
 		return ret;
 	}
 	
@@ -150,6 +150,7 @@ public:
 				repeated_states.insert(nodes.at(i)->state);
 			}
 			if(frontier.size() > max_size) max_size = frontier.size();
+			if(max_size > limit) break;
 			exp++;
 			delete curr;
 		}
@@ -166,12 +167,13 @@ int main(){
 	std::cout << "Type 1 to use a default puzzle, or 2 to create a custom" << std::endl;
 	std::cin >> num;
 	if(num == 1){
-		std::cout << "Choose a difficulty from 1 to 4" << std::endl;
+		std::cout << "Choose a difficulty from 1 to 5" << std::endl;
 		std::cin >> num;
 		if(num == 1) input = "FLAN_DRSE";
 		else if(num == 2) input = "FLAENDRS_";
 		else if(num == 3) input = "FLAENRSD_";
 		else if(num == 4) input = "DFLANERS_";
+		else if(num == 5) input = "DLAFNERS_";
 	}
 	else{
 		std::cout << "Enter the capital letters as they appear around the wheel, let '_' denote the empty space" << std::endl;
